@@ -5,7 +5,9 @@ De frontend is bewust klein en licht gehouden.
 
 ## Tech stack
 Backend: Java 25, Spring Boot, Spring MVC, Spring Data, JSON
+
 Best Practice: JUnit, Mockito, DDD, TDD
+
 DB: MySQL
 
 ## Doel
