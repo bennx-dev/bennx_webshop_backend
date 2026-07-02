@@ -5,6 +5,7 @@ import dev.webshop.categorieen.Categorie;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,13 @@ public class Artikel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long artikelId;
+    @Column(nullable = false, length = 13, unique = true)
     private String ean;
+    @Column(nullable = false, length = 45)
     private String naam;
+    @Column(nullable = false, length = 255)
     private String beschrijving;
+    @Column(nullable = false, precision = 18, scale = 5)
     private BigDecimal prijs;
     private Long gewichtInGram;
     private Long bestelpeil;
@@ -26,18 +31,19 @@ public class Artikel {
     private Long aantalBesteldLeverancier;
     private Long maxAantalInMagazijnPLaats;
     private Long leveranciersId;
+
     @ManyToMany
     @JoinTable(
             name = "ArtikelCategorieen",
             joinColumns = @JoinColumn(name = "artikelId"),
             inverseJoinColumns = @JoinColumn(name = "categorieId")
     )
-    private Set<Categorie> categorieen;
+    private Set<Categorie> categorieen = new HashSet<>();
 
     protected Artikel() {
     }
 
-    public Artikel(Long artikelId, String ean, String naam, String beschrijving, BigDecimal prijs, Long gewichtInGram, Long bestelpeil, Long voorraad, Long minimumVoorraad, Long maximumVoorraad, Long levertijd, Long aantalBesteldLeverancier, Long maxAantalInMagazijnPLaats, Long leveranciersId) {
+    public Artikel(String ean, String naam, String beschrijving, BigDecimal prijs, Long gewichtInGram, Long bestelpeil, Long voorraad, Long minimumVoorraad, Long maximumVoorraad, Long levertijd, Long aantalBesteldLeverancier, Long maxAantalInMagazijnPLaats, Long leveranciersId) {
         checkNotBlank(ean, "EAN");
         checkNotBlank(naam, "Naam");
         checkNonNegative(prijs, "Prijs");
@@ -51,7 +57,6 @@ public class Artikel {
         checkNonNegative(maxAantalInMagazijnPLaats, "Maximum in magazijn");
         checkNonNegativeOrZero(leveranciersId, "Leveranciers ID");
 
-        this.artikelId = artikelId;
         this.ean = ean;
         this.naam = naam;
         this.beschrijving = beschrijving;

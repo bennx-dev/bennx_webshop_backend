@@ -19,11 +19,9 @@ public class Categorie {
     protected Categorie() {
     }
 
-    public Categorie(Long categorieId, String naam, Long hoofdCategorieId) {
-        checkNonNegativeOrZero(categorieId, "categorieId");
+    public Categorie(String naam, Long hoofdCategorieId) {
         checkNotBlank(naam, "Naam");
 
-        this.categorieId = categorieId;
         this.naam = naam;
         this.hoofdCategorieId = hoofdCategorieId;
     }

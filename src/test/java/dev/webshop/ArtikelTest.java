@@ -19,7 +19,7 @@ public class ArtikelTest {
     void eenLegeEanisNietGeldig () {
 
         assertThrows(IllegalArgumentException.class, () ->
-                new Artikel(1L, "", "Naam"
+                new Artikel( "", "Naam"
                         , "Beschrijving",
                         BigDecimal.TEN, 100L, 10L
                         , 50L, 5L, 100L
@@ -31,7 +31,7 @@ public class ArtikelTest {
     @DisplayName("Een prijs onder 0 is niet geldig en werpt een exception")
     void eenPrijsOnderNulisNietGeldig () {
         assertThrows(IllegalArgumentException.class, () ->
-                new Artikel(1L, "5499999000019", "Naam"
+                new Artikel( "5499999000019", "Naam"
                         , "Beschrijving",
                         BigDecimal.valueOf(-1), 100L, 10L
                         , 50L, 5L, 100L
@@ -43,7 +43,7 @@ public class ArtikelTest {
     @DisplayName("Een leveranciersId met als waarde 0 is niet geldig en werpt een exception")
     void eenLeveranciersIdMetWaarde0IsNietGeldig () {
         assertThrows(IllegalArgumentException.class, () ->
-                new Artikel(1L, "5499999000019", "Naam"
+                new Artikel( "5499999000019", "Naam"
                         , "Beschrijving",
                         BigDecimal.TEN, 100L, 10L
                         , 50L, 5L, 100L

@@ -17,7 +17,7 @@ public class CategorieTest {
     void eenLegeNaamisNietGeldig () {
 
         assertThrows(IllegalArgumentException.class, () ->
-                new Categorie(1L,"", null));
+                new Categorie("", null));
     }
 
     @Test
@@ -25,7 +25,7 @@ public class CategorieTest {
     void eenNegatieveCategorieIdIsNietGeldig () {
 
         assertThrows(IllegalArgumentException.class, () ->
-                new Categorie(-1L,"test", 30L));
+                new Categorie("test", 30L));
     }
 
     /*
@@ -35,7 +35,7 @@ public class CategorieTest {
     @Test
     @DisplayName("Een hoofd categorie is correct")
     void hoofdCategorieCorrect() {
-        Categorie categorie = new Categorie(1L, "test", null);
+        Categorie categorie = new Categorie( "test", null);
 
         assertNull(categorie.getHoofdCategorieId());
         assertEquals("test", categorie.getNaam());
