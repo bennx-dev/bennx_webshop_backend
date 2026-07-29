@@ -1,0 +1,74 @@
+name: Deploy Webshop Backend
+
+# Definieert wanneer GitHub deze workflow moet starten
+on:
+  push:
+    branches:
+      - master
+
+# Een workflow bestaat uit 1 of meerdere jobs
+jobs:
+
+  # Naam van de job
+  build-and-deploy:
+
+    # Runner -> omgeving die build
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@main
+        with:
+          java-version: '25'
+          distribution: 'oracle-openjdk'
+          cache: maven
+
+
+      - name: Build with Maven
+        run: ./mvnw clean package -DskipTests
+
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }} # gebruiker die de workflow startte
+          password: ${{ secrets.GITHUB_TOKEN }} # automatische GitHub token
+
+
+      - name: Build and push Docker image to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: | # naam van de image
+            ghcr.io/${{ github.repository_owner }}/bennx-webshop-backend-image:latest
+
+
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          script: |
+            set -x
+            
+            whoami
+            pwd
+            
+            cd /opt/bennx
+            
+            pwd
+            ls -la
+            docker compose config
+  
+            docker compose pull bennx-webshop-backend-service
+            docker compose up -d --force-recreate bennx-webshop-backend-service
